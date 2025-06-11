@@ -29,7 +29,7 @@ while menu:
             matriz_stock = inicializar_matriz (len(depositos),
                                                 len(insumos))
             
-            matriz_stock = cargar_secuencialmente(matriz_stock)
+            matriz_stock = cargar_secuencialmente(matriz_stock,depositos, insumos)
 
             for fila in matriz_stock:
                 print(fila)
@@ -38,36 +38,21 @@ while menu:
             if not matriz_stock:
                 print("Primero tienes que cargar los stock")
             else:
-                for i in range(len(matriz_stock)):
-                    for j in range(len(matriz_stock[i])):
-                        if matriz_stock[i][j] > 5000:
-                            print(f"Los depositos de {depositos[i]} tienen un stock de {matriz_stock[i][j]}")
-                        else:
-                            print("Ningun deposito supero las 5000 unidades")
+                mostrar_deposito(matriz_stock, depositos, 5000)
 
         case 3:
             if not matriz_stock:
                 print("Primero tienes que cargar los insumos")
             else:
-                for i in range(len(matriz_stock)):
-                    for j in range(len(matriz_stock[i])):
-                        if matriz_stock [i][j] > 3000:
-                            print(f"Los insumos de {matriz_stock[j]} son {matriz_stock[i][j]}")
-                        else:
-                            print("Ningun insumo superar las 3000 unidades")
+                mostrar_insumos(matriz_stock, insumos, 3000)
+                
 
         case 4:
             if not matriz_stock:
                 print("Debes ingresar los insumos")
             else:
-                for i in range(len(matriz_stock)):
-                    cant_mayor = matriz_stock[i][0]
-
-                    for j in range (len(matriz_stock[i])):
-                        if matriz_stock > cant_mayor:
-                            cant_mayor = matriz_stock[i][j]
-
-                            print(f"El deposito de {depositos[i]} tiene mayor cantidad de unidades por insumos")
+                identificar_deposito_mayor(matriz_stock, insumos, depositos)
+            
         
         case 5:
             print("No llegue")
@@ -75,6 +60,6 @@ while menu:
         case 6:
                 print("No llegue")
 
-        case 9:
+        case _:
             menu = False
             print("Saliendo del programa...")

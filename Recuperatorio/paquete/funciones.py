@@ -1,3 +1,5 @@
+from paquete.validaciones import *
+
 def inicializar_matriz(cant_filas: int,
                        cant_columnas: int,
                        valor: any = 0) -> list:
@@ -20,7 +22,9 @@ def inicializar_matriz(cant_filas: int,
     
     return matriz
 
-def cargar_secuencialmente(matriz: list) -> list:
+def cargar_secuencialmente(matriz: list,
+                           depositos: list[str],
+                           insumos: list[str]) -> list:
 
     '''
     Carga un matriz de manera secuencialmente
@@ -33,8 +37,18 @@ def cargar_secuencialmente(matriz: list) -> list:
 
     for i in range(len(matriz)):
         for j in range (len(matriz[i])):
+            validar = False
 
-            matriz[i][j] = int(input(f"Ingrese el stock para {i} del insumo {j}: "))
+            while not validar:
+                valor = input(f"Ingrese el stock para {depositos[i]} del insumo {insumos[j]}: ")
+
+                if validar_numero(valor):
+                    valor = int(valor)
+                    validar = True
+                    matriz[i][j] = valor
+                else:
+                    print("Ingresa un numero")
+            
     
     return matriz
 
@@ -62,29 +76,47 @@ def cargar_distribuidamente(matriz: list) -> list:
     
     return matriz
 
+def mostrar_deposito(matriz: list,
+                     deposito: list[str],
+                     maximo: int):
+    
+    for i in range(len(matriz)):
+        acumulador = 0
+        for j in range(len(matriz[i])):
 
-def ordenar_por_burbujeo (lista: list) -> list:
-
-    if type(lista) != list:
-        print("El parametro que reciba debe ser una lista")
-
-    n = len(lista)
-
-    for i in range(n):
-
-        intercambio = False
-
-        for j in range (0, n - 1):
-            if lista[j] > lista[j + 1]:
-                intercambio = True
-                menor = lista[j + 1]
-
-                lista[j + 1] = lista[j]
-                lista[j] = menor
-
-                print(f"Se intercambio el {menor} por {lista[j + 1]}")
+            acumulador += matriz[i][j]
         
-        if intercambio == False:
-            break
+        if acumulador > maximo:
+            print(f"El deposito {deposito[i]} tiene {acumulador} insumos")
+
+def mostrar_insumos(matriz: list,
+                    insumos:list[str],
+                    maximo: int):
+    
+    acumulador_insumo = [0] * len(insumos)
+
+    for i in range(len(matriz)):
+        for j in range(len(matriz[i])):
+
+            acumulador_insumo[j] += matriz[i][j]
         
-    return lista
+    for j in range(len(acumulador_insumo)):
+        if acumulador_insumo[j] > maximo:
+            print(f"El insumo {insumos[j]} cuenta con {acumulador_insumo[j]} insumos")
+
+def identificar_deposito_mayor(matriz: list,
+                               insumos: list[str],
+                               depositos: list[str]):
+    
+    mayor_cantidades = [0] * len(insumos)
+    deposito_mayor = [0] * len(insumos)
+
+    for i in range(len(matriz)):
+        for j in range (len(matriz[i])):
+
+            if matriz[i][j] > mayor_cantidades[j]:
+                mayor_cantidades[j] = matriz[i][j]
+                deposito_mayor[j] = i
+                
+    for j in range(len(insumos)):
+        print(f"El insumo {insumos[j]} tiene la mayor cantidad en el deposito de {depositos[deposito_mayor[j]]} con {mayor_cantidades[j]} unidades")
